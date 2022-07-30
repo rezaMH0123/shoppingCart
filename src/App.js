@@ -1,14 +1,17 @@
-import react, { useEffect, useState } from 'react'
-import { getProducts } from './services/api'
 import './App.css'
-import ProductsContextProvider from './context/ProductsContextProvider'
-import Stor from './components/Stor'
+import React, { useEffect } from 'react'
+
+// Components
+import Store from './components/Store'
 import ProductDetails from './components/ProductDetails'
+
+// Context
+import ProductContextProvider from './context/ProductContextProvider'
+import CartContextProvider from './context/CartContextProvider'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
 function App() {
-  function Redirect({ to }) {
-    console.log(to)
+  const Redirect = ({ to }) => {
     let navigate = useNavigate()
     useEffect(() => {
       navigate(to)
@@ -16,13 +19,15 @@ function App() {
     return null
   }
   return (
-    <ProductsContextProvider>
-      <Routes>
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/product" element={<Stor />} />
-        <Route path="*" element={<Redirect to="/product" />} />
-      </Routes>
-    </ProductsContextProvider>
+    <ProductContextProvider>
+      <CartContextProvider>
+        <Routes>
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="*" element={<Redirect to="/product" />} />
+          <Route path="/product" element={<Store />} />
+        </Routes>
+      </CartContextProvider>
+    </ProductContextProvider>
   )
 }
 
