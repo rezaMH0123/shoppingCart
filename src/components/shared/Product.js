@@ -44,6 +44,11 @@ const Product = ({ productData }) => {
               -
             </button>
           )}
+          {quantityCount(state, productData.id) > 0 && (
+            <span className={styles.counter}>
+              {quantityCount(state, productData.id)}
+            </span>
+          )}
           {isInCart(state, productData.id) ? (
             <button
               className={styles.smallButton}
