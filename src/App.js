@@ -1,31 +1,27 @@
 import './App.css'
-import React, { useEffect } from 'react'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 // Components
 import Store from './components/Store'
 import ProductDetails from './components/ProductDetails'
+import Navbar from './components/shared/Navbar'
+// import ShopCart from './components/ShopCart'
 
 // Context
 import ProductContextProvider from './context/ProductContextProvider'
 import CartContextProvider from './context/CartContextProvider'
-import { Route, Routes, useNavigate } from 'react-router-dom'
 
 function App() {
-  const Redirect = ({ to }) => {
-    let navigate = useNavigate()
-    useEffect(() => {
-      navigate(to)
-    })
-    return null
-  }
   return (
     <ProductContextProvider>
       <CartContextProvider>
-        <Routes>
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="*" element={<Redirect to="/product" />} />
-          <Route path="/product" element={<Store />} />
-        </Routes>
+        <Navbar />
+        <Switch>
+          <Route path="/products/:id" component={ProductDetails} />
+          <Route path="/products" component={Store} />
+          {/* <Route path="/cart" component={ShopCart} /> */}
+          <Redirect to="/products" />
+        </Switch>
       </CartContextProvider>
     </ProductContextProvider>
   )
