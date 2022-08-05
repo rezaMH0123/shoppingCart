@@ -10,19 +10,33 @@ import { CartContext } from '../../context/CartContextProvider'
 // Icons
 import trashIcon from '../../assets/icons/trash.svg'
 
+// Style
+import styles from './Product.module.css'
+
 const Product = ({ productData }) => {
   const { state, dispatch } = useContext(CartContext)
 
   return (
-    <div>
-      <img src={productData.image} alt="product" style={{ width: '200px' }} />
+    <div className={styles.container}>
+      <img className={styles.cardImage} src={productData.image} alt="product" />
       <h3>{shorten(productData.title)}</h3>
-      <p>{productData.price}</p>
-      <div>
-        <Link to={`/product/${productData.id}`}>Details</Link>
-        <div>
+      <p>{`${productData.price} $`}</p>
+      <div className={styles.linkContainer}>
+        <Link to={`/products/${productData.id}`}>Details</Link>
+        <div className={styles.buttonContainer}>
+          {quantityCount(state, productData.id) === 1 && (
+            <button
+              className={styles.smallButton}
+              onClick={() =>
+                dispatch({ type: 'REMOVE_ITEM', payload: productData })
+              }
+            >
+              <img src={trashIcon} alt="trash" />
+            </button>
+          )}
           {quantityCount(state, productData.id) > 1 && (
             <button
+              className={styles.smallButton}
               onClick={() =>
                 dispatch({ type: 'DECREASE', payload: productData })
               }
@@ -30,17 +44,9 @@ const Product = ({ productData }) => {
               -
             </button>
           )}
-          {quantityCount(state, productData.id) === 1 && (
-            <button
-              onClick={() =>
-                dispatch({ type: 'REMOVE_ITEM', payload: productData })
-              }
-            >
-              <img src={trashIcon} alt="trash" style={{ width: '20px' }} />
-            </button>
-          )}
           {isInCart(state, productData.id) ? (
             <button
+              className={styles.smallButton}
               onClick={() =>
                 dispatch({ type: 'INCREASE', payload: productData })
               }
